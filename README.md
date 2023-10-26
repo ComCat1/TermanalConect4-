@@ -14,7 +14,6 @@ Player VS AI
 Prediction %
 Terminal Colour
 
-
 Coming Soon:
 Player VS Player
   
