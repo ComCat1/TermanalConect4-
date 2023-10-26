@@ -9,12 +9,16 @@ opponent. It's a simple yet addictive game and is a perfect way to have fun duri
 FEATURES:
 
     Gameplay Statistics
+    
 
     Machine vs Machine
 
+
     Player VS AI
+    
 
     Prediction %
+    
 
     Terminal Colour
 
