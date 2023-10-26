@@ -9,7 +9,7 @@ opponent. It's a simple yet addictive game and is a perfect way to have fun duri
 Game Percentage Done: 53%
 
 
-Bug Fixes Done: 75%
+Bug Fixes Done: 60%
 
 
 FEATURES:
