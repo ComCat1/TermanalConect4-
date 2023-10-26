@@ -16,7 +16,7 @@ FEATURES:
     
 
 
-    Player VS AI ✔️
+    Player VS Machine ✔️
     
     
 
@@ -26,20 +26,34 @@ FEATURES:
 
     Terminal Colour ✔️
 
+    
+    Order of player ✔️
+
 MODES:
 
     Extreme ✔️
+    
 
     Hard (COMING SOON) 🔴
+    
 
     Medium (COMING SOON) 🔴
+    
 
     Stupid (COMING SOON) 🔴
 
 COMING SOON:
 
 
-    Player VS Player 🔴
+    Player VS Player  🔴
+    
+
+    Game Modes 🔴
+    
+
+    Connect 4 Cheater 🔴
+
+    
     
 
 LICENCE: 
