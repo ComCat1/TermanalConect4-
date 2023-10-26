@@ -8,28 +8,38 @@ opponent. It's a simple yet addictive game and is a perfect way to have fun duri
 
 FEATURES:
 
-    Gameplay Statistics
+    Gameplay Statistics ✔️
     
     
 
-    Machine vs Machine
+    Machine vs Machine ✔️
     
 
 
-    Player VS AI
+    Player VS AI ✔️
     
     
 
-    Prediction %
+    Prediction % ✔️
     
     
 
-    Terminal Colour
+    Terminal Colour ✔️
+
+MODES:
+
+    Extreme ✔️
+
+    Hard (COMING SOON) 🔴
+
+    Medium (COMING SOON) 🔴
+
+    Stupid (COMING SOON) 🔴
 
 COMING SOON:
 
 
-    Player VS Player
+    Player VS Player 🔴
     
 
 LICENCE: 
