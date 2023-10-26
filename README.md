@@ -7,19 +7,20 @@ Python 3 terminal, offering an engaging and strategic experience against a compu
 opponent. It's a simple yet addictive game and is a perfect way to have fun during downtime.
 
 Features:
-Gameplay Statistics
 
-Machine vs Machine
+  Gameplay Statistics
 
-Player VS AI
+  Machine vs Machine
 
-Prediction %
+  Player VS AI
 
-Terminal Colour
+  Prediction %
+
+  Terminal Colour
 
 Coming Soon:
 
-Player VS Player
+  Player VS Player
 
 Licence: You're welcome to use this code, just remember to credit me when sharing it.
   
