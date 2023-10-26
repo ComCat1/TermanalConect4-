@@ -10,23 +10,30 @@ FEATURES:
 
     Gameplay Statistics
     
+    
 
     Machine vs Machine
+    
 
 
     Player VS AI
     
+    
 
     Prediction %
+    
     
 
     Terminal Colour
 
 COMING SOON:
 
+
     Player VS Player
+    
 
 LICENCE: 
+
 
     You're welcome to use this code, just remember to credit me when sharing it.
   
