@@ -1,26 +1,26 @@
 # TermanalConect4-
 
 
-Description:
+DESCRIPTION:
 This Connect 4 Game is a classic two-player board game designed for the 
 Python 3 terminal, offering an engaging and strategic experience against a computer 
 opponent. It's a simple yet addictive game and is a perfect way to have fun during downtime.
 
-Features:
+FEATURES:
 
-  Gameplay Statistics
+Gameplay Statistics
 
-  Machine vs Machine
+Machine vs Machine
 
-  Player VS AI
+Player VS AI
 
-  Prediction %
+Prediction %
 
-  Terminal Colour
+Terminal Colour
 
-Coming Soon:
+COMING SOON:
 
-  Player VS Player
+Player VS Player
 
-Licence: You're welcome to use this code, just remember to credit me when sharing it.
+LICENCE: You're welcome to use this code, just remember to credit me when sharing it.
   
