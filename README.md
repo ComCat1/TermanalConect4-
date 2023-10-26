@@ -7,6 +7,8 @@ Python 3 terminal, offering an engaging and strategic experience against a compu
 opponent. It's a simple yet addictive game and is a perfect way to have fun during downtime.
 
 Game Percentage Done: 53%
+
+
 Bug Fixes Done: 75%
 
 
