@@ -7,11 +7,11 @@ Python 3 terminal, offering an engaging and strategic experience against a compu
 opponent. It's a simple yet addictive game and is a perfect way to have fun during your downtime.
 
 Features:
-Gameplay Statistics
-Machine vs Machine 
-Player VS AI
-Prediction %
-Terminal Colour
+Gameplay Statistics,
+Machine vs Machine,
+Player VS AI,
+Prediction %,
+Terminal Colour,
 
 Coming Soon:
 Player VS Player
