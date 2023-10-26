@@ -27,7 +27,7 @@ FEATURES:
     Terminal Colour ✔️
 
     
-    Order of player ✔️
+    Order of Player ✔️
 
 MODES:
 
@@ -54,7 +54,7 @@ COMING SOON:
     Connect 4 Cheater 🔴
 
     
-    
+Percentage Done: 53%
 
 LICENCE: 
 
