@@ -8,19 +8,21 @@ opponent. It's a simple yet addictive game and is a perfect way to have fun duri
 
 FEATURES:
 
-Gameplay Statistics
+    Gameplay Statistics
 
-Machine vs Machine
+    Machine vs Machine
 
-Player VS AI
+    Player VS AI
 
-Prediction %
+    Prediction %
 
-Terminal Colour
+    Terminal Colour
 
 COMING SOON:
 
-Player VS Player
+    Player VS Player
 
-LICENCE: You're welcome to use this code, just remember to credit me when sharing it.
+LICENCE: 
+
+    You're welcome to use this code, just remember to credit me when sharing it.
   
