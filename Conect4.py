@@ -344,7 +344,7 @@ def play_ai_vs_ai():
             with multiprocessing.Manager() as manager:
                 return_dict = manager.dict()
                 processes = []
-                for d in range(1, 6):  # Adjust the range according depth
+                for d in range(1, 6):  # adjust the range for depth
                     input_data = (board.copy(), d, -np.Inf, np.Inf, True)
                     process = multiprocessing.Process(target=minimax_process, args=(input_data, return_dict))
                     processes.append(process)
@@ -366,14 +366,14 @@ def play_ai_vs_ai():
                     game_over = True
 
         else:
-            # Predict player winning move
+            # predict player winning move
             _, predicted_player2_wins = minimax(board, 5, -np.Inf, np.Inf, False)
             player2_wins = predicted_player2_wins
 
             with multiprocessing.Manager() as manager:
                 return_dict = manager.dict()
                 processes = []
-                for d in range(1, 6):  # Adjust range for depth (not using anymore)
+                for d in range(1, 6):  # adjust range for depth (not using anymore)
                     input_data = (board.copy(), d, -np.Inf, np.Inf, False)
                     process = multiprocessing.Process(target=minimax_process, args=(input_data, return_dict))
                     processes.append(process)
