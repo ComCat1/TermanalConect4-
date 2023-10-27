@@ -1,12 +1,18 @@
-import numpy as np
 import multiprocessing
-import time
+import numpy as np
 import os
+#import time
+#slim down latter too bulky
 ROW_COUNT = 6
+
 COLUMN_COUNT = 7
-possible_wins = 51
-#DEPTH = 51
+
+possible_wins = 51 # used for count_possible_openings but should double check this 
+
+#DEPTH = 51 #(not using depth anymore but could be used later(for gamemodes)
 ##################################################################################################
+#incorect for the longer games (fix) 
+#its close but seems wrong with the %'s(wrong numbers needs tweaking)
 def calculate_probabilities(board):
     if winning_move(board, 1):
         return 1.0, 0.0
@@ -19,7 +25,6 @@ def calculate_probabilities(board):
         player_prob = player_score / total_positions
         ai_prob = ai_score / total_positions
         return player_prob, ai_prob
-
 
 def minimax_process(input_data, return_dict):
     board, depth, alpha, beta, maximizingPlayer = input_data
@@ -34,42 +39,45 @@ def drop_piece(board, row, col, piece):
 
 def is_valid_location(board, col):
     return board[ROW_COUNT-1][col] == 0
-
+#find valid space
 def get_next_open_row(board, col):
     for r in range(ROW_COUNT):
         if board[r][col] == 0:
             return r
-
+####################################################################
+####################################################################
+####################################################################
 player_color_code = ""
 ai_color_code = ""
 
+#works well dont toutch
 def print_board(board, player_prob, ai_prob, player_wins, ai_wins):
-    os.system('cls' if os.name == 'nt' else 'clear')  # Clear terminal command
+    os.system('cls' if os.name == 'nt' else 'clear')  # Clear terminal (neatness)
 
     print(" 0 1 2 3 4 5 6")
     flipped_board = np.flip(board, 0)
     
-    player_openings = count_possible_openings(board, 1)
-    ai_openings = count_possible_openings(board, 2)
+    player_openings = count_possible_openings(board, 1) #player side
+    ai_openings = count_possible_openings(board, 2) #AI side
 
     for r, row in enumerate(flipped_board):
         row_display = '|'
         for val in row:
             if val == 0:
-                row_display += '\033[0m |'  # Reset color
+                row_display += '\033[0m |'  # Reset 
             elif val == 1:
-                row_display += '\033[91mX\033[0m|'  # Red for Player 1
+                row_display += '\033[91mX\033[0m|'  # Red (Player) 
             else:
                 row_display += '\033[92mO\033[0m|'  # Green for AI
         if player_prob > ai_prob:
-            player_color_code = '\033[92m'  # Green for higher player probability
-            ai_color_code = '\033[91m'  # Red for lower AI probability
+            player_color_code = '\033[92m'  # Green for higher probability (Player)
+            ai_color_code = '\033[91m'  # Red for lower probability (AI)
         elif player_prob < ai_prob:
-            player_color_code = '\033[91m'  # Red for lower player probability
-            ai_color_code = '\033[92m'  # Green for higher AI probability
+            player_color_code = '\033[91m'  # Red for lower probability (player)
+            ai_color_code = '\033[92m'  # Green for higher probability (AI)
         else:
-            player_color_code = '\033[93m'  # Yellow for equal probabilities
-            ai_color_code = '\033[93m'  # Yellow for equal probabilities
+            player_color_code = '\033[93m'  # Yellow for equal (player) 
+            ai_color_code = '\033[93m'  # Yellow for equal (AI
         print(row_display)
 
     print('---------------')
@@ -77,19 +85,20 @@ def print_board(board, player_prob, ai_prob, player_wins, ai_wins):
     print(f"{player_color_code}PLAYER:{player_prob*100:.2f}% ({player_openings} of {possible_wins})\033[0m")
     print(f"{ai_color_code}AI:{ai_prob*100:.2f}% ({ai_openings} of {possible_wins})\033[0m")
 
-
+######################################################
 def count_possible_openings(board, piece):
     openings = 0
 
     for col in range(COLUMN_COUNT):
         playable = is_valid_location(board, col)
         for row in range(ROW_COUNT - 1, -1, -1):
-            if board[row][col] == 0 and playable:
+            if board[row][col] == 0 and playable:            #this is broken (finding wrong # of openings) 
                 openings += 1
             elif board[row][col] != 0:
                 playable = False
 
     return openings
+######################################################
 
 def winning_move(board, piece):
     # Check horizontal 
@@ -135,32 +144,32 @@ def evaluate_window(window, piece):
 def score_position(board, piece):
     score = 0
 
-    # Score center column
+    # center 
     center_array = [int(i) for i in list(board[:, COLUMN_COUNT // 2])]
     center_count = center_array.count(piece)
     score += center_count * 3
 
-    # Score horizontal
+    # horizontal
     for r in range(ROW_COUNT):
         row_array = [int(i) for i in list(board[r, :])]
         for c in range(COLUMN_COUNT - 3):
             window = row_array[c:c + 4]
             score += evaluate_window(window, piece)
 
-    # Score vertical
+    # vertical
     for c in range(COLUMN_COUNT):
         col_array = [int(i) for i in list(board[:, c])]
         for r in range(ROW_COUNT - 3):
             window = col_array[r:r + 4]
             score += evaluate_window(window, piece)
 
-    # Score positive diagonal
+    # positive diagonal
     for r in range(ROW_COUNT - 3):
         for c in range(COLUMN_COUNT - 3):
             window = [board[r + i][c + i] for i in range(4)]
             score += evaluate_window(window, piece)
 
-    # Score negative diagonal
+    # negative diagonal
     for r in range(ROW_COUNT - 3):
         for c in range(COLUMN_COUNT - 3):
             window = [board[r + 3 - i][c + i] for i in range(4)]
@@ -170,7 +179,7 @@ def score_position(board, piece):
 
 def is_terminal_node(board):
     return winning_move(board, 1) or winning_move(board, 2) or len(get_valid_locations(board)) == 0
-
+#solver(better then depth)
 def minimax(board, depth, alpha, beta, maximizingPlayer):
     valid_locations = get_valid_locations(board)
     is_terminal = is_terminal_node(board)
@@ -182,7 +191,7 @@ def minimax(board, depth, alpha, beta, maximizingPlayer):
                 return (None, -10000000000000)
             else:  # Game over
                 return (None, 0)
-        else:  # Depth is zero
+        else:  # Depth is zero // (no longer using depth) :(
             return (None, score_position(board, 2))
 
     if maximizingPlayer:
@@ -237,7 +246,7 @@ def play_connect4_vs_ai():
     while not game_over:
         
         if turn == 0:
-            # Predict the player's winning move
+            # player's winning move
             _, predicted_player_wins = minimax(board, 5, -np.Inf, np.Inf, False)
             player_wins = predicted_player_wins
 
@@ -251,14 +260,14 @@ def play_connect4_vs_ai():
                     player_wins += 1
                     game_over = True
                 else:
-                    # Predict the AI's winning move
+                    # AI winning move
                     _, predicted_ai_wins = minimax(board, 5, -np.Inf, np.Inf, True)
                     ai_wins = predicted_ai_wins
             else:
                 print("Invalid move. Try again.")
 
         else:
-            # Predict the AI's winning move
+            #AI winning move
             _, predicted_ai_wins = minimax(board, 5, -np.Inf, np.Inf, True)
             ai_wins = predicted_ai_wins
 
@@ -287,7 +296,7 @@ def play_ai_vs_connect4():
 
     while not game_over:
         if turn == 0:
-            # Predict the AI's winning move
+            # AI winning move
             _, predicted_ai_wins = minimax(board, 5, -np.Inf, np.Inf, True)
             ai_wins = predicted_ai_wins
 
@@ -301,7 +310,7 @@ def play_ai_vs_connect4():
                     ai_wins += 1
                     game_over = True
                 else:
-                    # Predict the player's winning move
+                    # player winning move
                     _, predicted_player_wins = minimax(board, 5, -np.Inf, np.Inf, False)
                     player_wins = predicted_player_wins
 
@@ -331,7 +340,7 @@ def play_ai_vs_ai():
 
     while not game_over:
         if turn == 0:
-            # Predict player 1's winning move
+            # player 1's winning move
             _, predicted_player1_wins = minimax(board, 5, -np.Inf, np.Inf, True)
             player1_wins = predicted_player1_wins
 
@@ -367,7 +376,7 @@ def play_ai_vs_ai():
             with multiprocessing.Manager() as manager:
                 return_dict = manager.dict()
                 processes = []
-                for d in range(1, 6):  # Adjust the range according to the desired depth
+                for d in range(1, 6):  # Adjust range for depth (not using anymore)
                     input_data = (board.copy(), d, -np.Inf, np.Inf, False)
                     process = multiprocessing.Process(target=minimax_process, args=(input_data, return_dict))
                     processes.append(process)
@@ -394,24 +403,36 @@ def play_ai_vs_ai():
         turn += 1
         turn = turn % 2
 
-
+#need to add some error handeling 
 def main():
-    choice = int(input("Enter 1 to play against the AI, 2 to watch the AI play itself: "))
-    if choice == 1:
-        player_first = int(input("Enter 1 if you want to make the first move, 2 if you want the AI to make the first move: "))
+    pick = int(input("Enter 1 to play against the AI, 2 to watch the AI play itself: "))
+    if pick == 1:
+        player_first = int(input("Enter 1 to make the first move, 2 if you want the AI to make the first move: "))
         if player_first == 1:
             play_connect4_vs_ai()
         elif player_first == 2:
             play_ai_vs_connect4()
         else:
-            print("Invalid choice. Please try again.")
-    elif choice == 2:
+            print("bad choice. try again. :P")
+    elif pick == 2:
         play_ai_vs_ai()
     else:
-        print("Invalid choice. Please try again.")
+        print("bad choice. try again. :P")
 
 if __name__ == "__main__":
     main()
-
+# shouldent be using 3 diffrent defs for gamemodes slim it down latter
 
 #holy mother of god
+
+#                   _ |\_   woof
+#                   \` ..\
+#              __,.-" =__Y=
+#            ."        )
+#      _    /   ,    \/\_
+#     ((____|    )_-\ \_-`
+#    `-----'`-----` `--`
+
+
+
+
