@@ -6,7 +6,7 @@ ROW_COUNT = 6
 COLUMN_COUNT = 7
 possible_wins = 51
 #DEPTH = 51
-
+##################################################################################################
 def calculate_probabilities(board):
     if winning_move(board, 1):
         return 1.0, 0.0
@@ -90,15 +90,6 @@ def count_possible_openings(board, piece):
                 playable = False
 
     return openings
-
-
-
-
-
-
-
-
-
 
 def winning_move(board, piece):
     # Check horizontal 
