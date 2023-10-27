@@ -58,8 +58,3 @@ COMING SOON:
     Connect 4 Cheater 🔴
     
 
-LICENCE: 
-
-
-    You're welcome to use this code, just remember to credit me when sharing it.
-  
