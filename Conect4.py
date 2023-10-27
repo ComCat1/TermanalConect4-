@@ -80,6 +80,7 @@ def print_board(board, player_prob, ai_prob, player_wins, ai_wins):
 
     print(f"{player_color_code}PLAYER:{player_prob*100:.2f}% ({player_openings} of {possible_wins})\033[0m")
     print(f"{ai_color_code}AI:{ai_prob*100:.2f}% ({ai_openings} of {possible_wins})\033[0m")
+
 ########################################################################################################
 def count_possible_openings(board, piece):
     openings = 0
@@ -94,6 +95,7 @@ def count_possible_openings(board, piece):
 
     return openings
 ######################################################################################################
+
 def winning_move(board, piece):
     # Check horizontal 
     for c in range(COLUMN_COUNT - 3):
