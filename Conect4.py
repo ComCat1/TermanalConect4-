@@ -62,26 +62,24 @@ def print_board(board, player_prob, ai_prob, player_wins, ai_wins):
             if val == 0:
                 row_display += '\033[0m |'  # Reset 
             elif val == 1:
-                row_display += '\033[91mX\033[0m|'  # Red (Player) 
+                row_display += '\033[91mX\033[0m|'  #red  
             else:
-                row_display += '\033[92mO\033[0m|'  # Green for AI
+                row_display += '\033[92mO\033[0m|'  #green 
         if player_prob > ai_prob:
-            player_color_code = '\033[92m'  # Green for higher probability (Player)
-            ai_color_code = '\033[91m'  # Red for lower probability (AI)
+            player_color_code = '\033[92m'  #higher (green)
+            ai_color_code = '\033[91m'  #flower  (red)
         elif player_prob < ai_prob:
-            player_color_code = '\033[91m'  # Red for lower probability (player)
-            ai_color_code = '\033[92m'  # Green for higher probability (AI)
+            player_color_code = '\033[91m'  #low(
+            ai_color_code = '\033[92m'  # higher(
         else:
-            player_color_code = '\033[93m'  # Yellow for equal (player) 
-            ai_color_code = '\033[93m'  # Yellow for equal (AI
+            player_color_code = '\033[93m'  #equal (yellow) 
+            ai_color_code = '\033[93m'  # equal (yellow
         print(row_display)
 
     print('---------------')
 
     print(f"{player_color_code}PLAYER:{player_prob*100:.2f}% ({player_openings} of {possible_wins})\033[0m")
     print(f"{ai_color_code}AI:{ai_prob*100:.2f}% ({ai_openings} of {possible_wins})\033[0m")
-
-
 ########################################################################################################
 def count_possible_openings(board, piece):
     openings = 0
@@ -96,7 +94,6 @@ def count_possible_openings(board, piece):
 
     return openings
 ######################################################################################################
-
 def winning_move(board, piece):
     # Check horizontal 
     for c in range(COLUMN_COUNT - 3):
@@ -140,33 +137,32 @@ def evaluate_window(window, piece):
 
 def score_position(board, piece):
     score = 0
-
-    # center 
+     # center 
     center_array = [int(i) for i in list(board[:, COLUMN_COUNT // 2])]
     center_count = center_array.count(piece)
     score += center_count * 3
 
-    # horizontal
+    #horizontal
     for r in range(ROW_COUNT):
         row_array = [int(i) for i in list(board[r, :])]
         for c in range(COLUMN_COUNT - 3):
             window = row_array[c:c + 4]
             score += evaluate_window(window, piece)
 
-    # vertical
+    #vertical
     for c in range(COLUMN_COUNT):
         col_array = [int(i) for i in list(board[:, c])]
         for r in range(ROW_COUNT - 3):
             window = col_array[r:r + 4]
             score += evaluate_window(window, piece)
 
-    # positive diagonal
+    #positive diagonal
     for r in range(ROW_COUNT - 3):
         for c in range(COLUMN_COUNT - 3):
             window = [board[r + i][c + i] for i in range(4)]
             score += evaluate_window(window, piece)
 
-    # negative diagonal
+    #negative diagonal
     for r in range(ROW_COUNT - 3):
         for c in range(COLUMN_COUNT - 3):
             window = [board[r + 3 - i][c + i] for i in range(4)]
@@ -243,7 +239,7 @@ def play_connect4_vs_ai():
     while not game_over:
         
         if turn == 0:
-            # player's winning move
+            #player's winning move
             _, predicted_player_wins = minimax(board, 5, -np.Inf, np.Inf, False)
             player_wins = predicted_player_wins
 
@@ -257,7 +253,7 @@ def play_connect4_vs_ai():
                     player_wins += 1
                     game_over = True
                 else:
-                    # AI winning move
+                    #AI winning move
                     _, predicted_ai_wins = minimax(board, 5, -np.Inf, np.Inf, True)
                     ai_wins = predicted_ai_wins
             else:
@@ -293,7 +289,7 @@ def play_ai_vs_connect4():
 
     while not game_over:
         if turn == 0:
-            # AI winning move
+            #AI winning move
             _, predicted_ai_wins = minimax(board, 5, -np.Inf, np.Inf, True)
             ai_wins = predicted_ai_wins
 
@@ -307,7 +303,7 @@ def play_ai_vs_connect4():
                     ai_wins += 1
                     game_over = True
                 else:
-                    # player winning move
+                    #player winning move
                     _, predicted_player_wins = minimax(board, 5, -np.Inf, np.Inf, False)
                     player_wins = predicted_player_wins
 
@@ -337,14 +333,14 @@ def play_ai_vs_ai():
 
     while not game_over:
         if turn == 0:
-            # player 1's winning move
+            #player 1's winning move
             _, predicted_player1_wins = minimax(board, 5, -np.Inf, np.Inf, True)
             player1_wins = predicted_player1_wins
 
             with multiprocessing.Manager() as manager:
                 return_dict = manager.dict()
                 processes = []
-                for d in range(1, 6):  # adjust the range for depth
+                for d in range(1, 6):  #adjust the range for depth
                     input_data = (board.copy(), d, -np.Inf, np.Inf, True)
                     process = multiprocessing.Process(target=minimax_process, args=(input_data, return_dict))
                     processes.append(process)
@@ -366,14 +362,14 @@ def play_ai_vs_ai():
                     game_over = True
 
         else:
-            # predict player winning move
+            #predict player winning move
             _, predicted_player2_wins = minimax(board, 5, -np.Inf, np.Inf, False)
             player2_wins = predicted_player2_wins
 
             with multiprocessing.Manager() as manager:
                 return_dict = manager.dict()
                 processes = []
-                for d in range(1, 6):  # adjust range for depth (not using anymore)
+                for d in range(1, 6):  #adjust range for depth (not using anymore)
                     input_data = (board.copy(), d, -np.Inf, np.Inf, False)
                     process = multiprocessing.Process(target=minimax_process, args=(input_data, return_dict))
                     processes.append(process)
