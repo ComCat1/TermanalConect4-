@@ -172,7 +172,7 @@ def score_position(board, piece):
 
 def is_terminal_node(board):
     return winning_move(board, 1) or winning_move(board, 2) or len(get_valid_locations(board)) == 0
-#solver(better then depth)
+#solver
 def minimax(board, depth, alpha, beta, maximizingPlayer):
     valid_locations = get_valid_locations(board)
     is_terminal = is_terminal_node(board)
