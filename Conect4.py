@@ -396,7 +396,6 @@ def play_ai_vs_ai():
         turn += 1
         turn = turn % 2
 
-#need to add some error handeling 
 def main():
     pick = int(input("Enter 1 to play against the AI, 2 to watch the AI play itself: "))
     if pick == 1:
@@ -415,15 +414,14 @@ def main():
 if __name__ == "__main__":
     main()
 #if it works it works...
-#holy mother of god
 
 #                   _ |\_   woof
 #                   \` ..\
-#              __,.-" =__Y=
-#            ."        )
-#      _    /   ,    \/\_
-#     ((____|    )_-\ \_-`
-#    `-----'`-----` `--`
+#              __,.-" =__Y=       woof
+#            ."        )              ╱|、
+#      _    /   ,    \/\_            (˚ˎ 。7  
+#     ((____|    )_-\ \_-`            |、˜〵          
+#    `-----'`-----` `--`              じしˍ,)ノ
 
 
 
