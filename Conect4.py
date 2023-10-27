@@ -48,6 +48,10 @@ def print_board(board, player_prob, ai_prob, player_wins, ai_wins):
 
     print(" 0 1 2 3 4 5 6")
     flipped_board = np.flip(board, 0)
+    
+    player_openings = count_possible_openings(board, 1)
+    ai_openings = count_possible_openings(board, 2)
+
     for r, row in enumerate(flipped_board):
         row_display = '|'
         for val in row:
@@ -67,12 +71,29 @@ def print_board(board, player_prob, ai_prob, player_wins, ai_wins):
             player_color_code = '\033[93m'  # Yellow for equal probabilities
             ai_color_code = '\033[93m'  # Yellow for equal probabilities
         print(row_display)
+
     print('---------------')
 
-    print(f"{player_color_code}Player: {player_prob*100:.2f}%\033[0m")
-    print(f"{ai_color_code}AI: {ai_prob*100:.2f}%\033[0m")
-    print(f"{player_wins}")
-    print(f"{ai_wins}")
+    print(f"{player_color_code}PLAYER:{player_prob*100:.2f}% ({player_openings} of {possible_wins})\033[0m")
+    print(f"{ai_color_code}AI:{ai_prob*100:.2f}% ({ai_openings} of {possible_wins})\033[0m")
+
+
+def count_possible_openings(board, piece):
+    openings = 0
+
+    for col in range(COLUMN_COUNT):
+        playable = is_valid_location(board, col)
+        for row in range(ROW_COUNT - 1, -1, -1):
+            if board[row][col] == 0 and playable:
+                openings += 1
+            elif board[row][col] != 0:
+                playable = False
+
+    return openings
+
+
+
+
 
 
 
@@ -188,7 +209,7 @@ def minimax(board, depth, alpha, beta, maximizingPlayer):
             if alpha >= beta:
                 break
         return column, value
-    else:  # player
+    else:  #  player
         value = np.Inf
         column = np.random.choice(valid_locations)
         for col in valid_locations:
