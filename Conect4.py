@@ -7,12 +7,10 @@ ROW_COUNT = 6
 
 COLUMN_COUNT = 7
 
-possible_wins = 51 # used for count_possible_openings but should double check this 
+possible_wins = 51 # double check this 
 
-#DEPTH = 51 #(not using depth anymore but could be used later(for gamemodes)
-##################################################################################################
-#incorect for the longer games (fix) 
-#its close but seems wrong with the %'s(wrong numbers needs tweaking)
+#DEPTH = 51 
+
 def calculate_probabilities(board):
     if winning_move(board, 1):
         return 1.0, 0.0
@@ -44,9 +42,7 @@ def get_next_open_row(board, col):
     for r in range(ROW_COUNT):
         if board[r][col] == 0:
             return r
-####################################################################
-####################################################################
-####################################################################
+
 player_color_code = ""
 ai_color_code = ""
 
@@ -57,8 +53,8 @@ def print_board(board, player_prob, ai_prob, player_wins, ai_wins):
     print(" 0 1 2 3 4 5 6")
     flipped_board = np.flip(board, 0)
     
-    player_openings = count_possible_openings(board, 1) #player side
-    ai_openings = count_possible_openings(board, 2) #AI side
+    player_openings = count_possible_openings(board, 1)
+    ai_openings = count_possible_openings(board, 2) 
 
     for r, row in enumerate(flipped_board):
         row_display = '|'
@@ -85,7 +81,8 @@ def print_board(board, player_prob, ai_prob, player_wins, ai_wins):
     print(f"{player_color_code}PLAYER:{player_prob*100:.2f}% ({player_openings} of {possible_wins})\033[0m")
     print(f"{ai_color_code}AI:{ai_prob*100:.2f}% ({ai_openings} of {possible_wins})\033[0m")
 
-######################################################
+
+########################################################################################################
 def count_possible_openings(board, piece):
     openings = 0
 
@@ -98,7 +95,7 @@ def count_possible_openings(board, piece):
                 playable = False
 
     return openings
-######################################################
+######################################################################################################
 
 def winning_move(board, piece):
     # Check horizontal 
@@ -347,7 +344,7 @@ def play_ai_vs_ai():
             with multiprocessing.Manager() as manager:
                 return_dict = manager.dict()
                 processes = []
-                for d in range(1, 6):  # Adjust the range according to the desired depth
+                for d in range(1, 6):  # Adjust the range according depth
                     input_data = (board.copy(), d, -np.Inf, np.Inf, True)
                     process = multiprocessing.Process(target=minimax_process, args=(input_data, return_dict))
                     processes.append(process)
@@ -369,7 +366,7 @@ def play_ai_vs_ai():
                     game_over = True
 
         else:
-            # Predict player 2's winning move
+            # Predict player winning move
             _, predicted_player2_wins = minimax(board, 5, -np.Inf, np.Inf, False)
             player2_wins = predicted_player2_wins
 
@@ -385,7 +382,7 @@ def play_ai_vs_ai():
                 for process in processes:
                     process.join()
 
-                depth_results = [(return_dict[d][0], return_dict[d][1]) for d in range(1, 6)]  # Adjust the range here as well
+                depth_results = [(return_dict[d][0], return_dict[d][1]) for d in range(1, 6)]  #same as last
                 col, _ = max(depth_results, key=lambda item: item[1])
 
             if is_valid_location(board, col):
@@ -421,8 +418,7 @@ def main():
 
 if __name__ == "__main__":
     main()
-# shouldent be using 3 diffrent defs for gamemodes slim it down latter
-
+#if it works it works...
 #holy mother of god
 
 #                   _ |\_   woof
