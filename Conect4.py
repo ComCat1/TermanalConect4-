@@ -1,12 +1,10 @@
-#By: CatCom
-#10/26/2022
-
 import numpy as np
 import multiprocessing
 import time
+import os
 ROW_COUNT = 6
 COLUMN_COUNT = 7
-
+possible_wins = 51
 #DEPTH = 51
 
 def calculate_probabilities(board):
@@ -42,7 +40,12 @@ def get_next_open_row(board, col):
         if board[r][col] == 0:
             return r
 
-def print_board(board, player_prob, ai_prob):
+player_color_code = ""
+ai_color_code = ""
+
+def print_board(board, player_prob, ai_prob, player_wins, ai_wins):
+    os.system('cls' if os.name == 'nt' else 'clear')  # Clear terminal command
+
     print(" 0 1 2 3 4 5 6")
     flipped_board = np.flip(board, 0)
     for r, row in enumerate(flipped_board):
@@ -63,12 +66,15 @@ def print_board(board, player_prob, ai_prob):
         else:
             player_color_code = '\033[93m'  # Yellow for equal probabilities
             ai_color_code = '\033[93m'  # Yellow for equal probabilities
-        if r == 0:
-            row_display += f" {player_color_code}Player:{player_prob*100:.2f}%\033[0m"
-        elif r == 1:
-            row_display += f" {ai_color_code}AI:{ai_prob*100:.2f}%\033[0m"
         print(row_display)
     print('---------------')
+
+    print(f"{player_color_code}Player: {player_prob*100:.2f}%\033[0m")
+    print(f"{ai_color_code}AI: {ai_prob*100:.2f}%\033[0m")
+    print(f"{player_wins}")
+    print(f"{ai_wins}")
+
+
 
 
 
@@ -213,9 +219,16 @@ def play_connect4_vs_ai():
     board = create_board()
     game_over = False
     turn = 0
+    player_wins = 0
+    ai_wins = 0
 
     while not game_over:
+        
         if turn == 0:
+            # Predict the player's winning move
+            _, predicted_player_wins = minimax(board, 5, -np.Inf, np.Inf, False)
+            player_wins = predicted_player_wins
+
             col = int(input("Player 1 Make your selection (0-6):"))
             if is_valid_location(board, col):
                 row = get_next_open_row(board, col)
@@ -223,20 +236,32 @@ def play_connect4_vs_ai():
 
                 if winning_move(board, 1):
                     print("Player 1 wins!")
+                    player_wins += 1
                     game_over = True
+                else:
+                    # Predict the AI's winning move
+                    _, predicted_ai_wins = minimax(board, 5, -np.Inf, np.Inf, True)
+                    ai_wins = predicted_ai_wins
+            else:
+                print("Invalid move. Try again.")
 
         else:
-            col, minimax_score = minimax(board, 5, -np.Inf, np.Inf, True)
+            # Predict the AI's winning move
+            _, predicted_ai_wins = minimax(board, 5, -np.Inf, np.Inf, True)
+            ai_wins = predicted_ai_wins
+
+            col, _ = minimax(board, 5, -np.Inf, np.Inf, True)
             if is_valid_location(board, col):
                 row = get_next_open_row(board, col)
                 drop_piece(board, row, col, 2)
 
                 if winning_move(board, 2):
                     print("Player 2 wins!")
+                    ai_wins += 1
                     game_over = True
 
         player1_percent, player2_percent = calculate_probabilities(board)
-        print_board(board, player1_percent, player2_percent)
+        print_board(board, player1_percent, player2_percent, f"Player: {player_wins} of {possible_wins} possible_wins", f"AI: {ai_wins} of {possible_wins} possible_wins")
 
         turn += 1
         turn = turn % 2
@@ -245,16 +270,93 @@ def play_ai_vs_connect4():
     board = create_board()
     game_over = False
     turn = 0
+    player_wins = 0
+    ai_wins = 0
 
     while not game_over:
         if turn == 0:
-            time.sleep(0.1)
-            #  search deeper
+            # Predict the AI's winning move
+            _, predicted_ai_wins = minimax(board, 5, -np.Inf, np.Inf, True)
+            ai_wins = predicted_ai_wins
+
+            col, minimax_score = minimax(board, 5, -np.Inf, np.Inf, True)
+            if is_valid_location(board, col):
+                row = get_next_open_row(board, col)
+                drop_piece(board, row, col, 2)
+
+                if winning_move(board, 2):
+                    print("AI wins!")
+                    ai_wins += 1
+                    game_over = True
+                else:
+                    # Predict the player's winning move
+                    _, predicted_player_wins = minimax(board, 5, -np.Inf, np.Inf, False)
+                    player_wins = predicted_player_wins
+
+        else:
+            col = int(input("Make your selection (0-6):"))
+            if is_valid_location(board, col):
+                row = get_next_open_row(board, col)
+                drop_piece(board, row, col, 1)
+
+                if winning_move(board, 1):
+                    print("Player wins!")
+                    player_wins += 1
+                    game_over = True
+
+        player1_percent, player2_percent = calculate_probabilities(board)
+        print_board(board, player1_percent, player2_percent, f"Player: {player_wins} of {possible_wins} possible_wins", f"AI: {ai_wins} of {possible_wins} possible_wins")
+
+        turn += 1
+        turn = turn % 2
+
+def play_ai_vs_ai():
+    board = create_board()
+    game_over = False
+    turn = 0
+    player1_wins = 0
+    player2_wins = 0
+
+    while not game_over:
+        if turn == 0:
+            # Predict player 1's winning move
+            _, predicted_player1_wins = minimax(board, 5, -np.Inf, np.Inf, True)
+            player1_wins = predicted_player1_wins
+
             with multiprocessing.Manager() as manager:
                 return_dict = manager.dict()
                 processes = []
-                for d in range(1, 6):  # Adjust range for depth
+                for d in range(1, 6):  # Adjust the range according to the desired depth
                     input_data = (board.copy(), d, -np.Inf, np.Inf, True)
+                    process = multiprocessing.Process(target=minimax_process, args=(input_data, return_dict))
+                    processes.append(process)
+                    process.start()
+
+                for process in processes:
+                    process.join()
+
+                depth_results = [(return_dict[d][0], return_dict[d][1]) for d in range(1, 6)]  # Adjust the range here as well
+                col, _ = max(depth_results, key=lambda item: item[1])
+
+            if is_valid_location(board, col):
+                row = get_next_open_row(board, col)
+                drop_piece(board, row, col, 1)
+
+                if winning_move(board, 1):
+                    print("Player 1 wins!")
+                    player1_wins += 1
+                    game_over = True
+
+        else:
+            # Predict player 2's winning move
+            _, predicted_player2_wins = minimax(board, 5, -np.Inf, np.Inf, False)
+            player2_wins = predicted_player2_wins
+
+            with multiprocessing.Manager() as manager:
+                return_dict = manager.dict()
+                processes = []
+                for d in range(1, 6):  # Adjust the range according to the desired depth
+                    input_data = (board.copy(), d, -np.Inf, np.Inf, False)
                     process = multiprocessing.Process(target=minimax_process, args=(input_data, return_dict))
                     processes.append(process)
                     process.start()
@@ -270,86 +372,16 @@ def play_ai_vs_connect4():
                 drop_piece(board, row, col, 2)
 
                 if winning_move(board, 2):
-                    print("AI wins!")
-                    game_over = True
-
-        else:
-            col = int(input("Make your selection (0-6):"))
-            if is_valid_location(board, col):
-                row = get_next_open_row(board, col)
-                drop_piece(board, row, col, 1)
-
-                if winning_move(board, 1):
-                    print("Player wins!")
-                    game_over = True
-
-        player1_percent, player2_percent = calculate_probabilities(board)
-        print_board(board, player1_percent, player2_percent)
-
-        turn += 1
-        turn = turn % 2
-
-def play_ai_vs_ai():
-    board = create_board()
-    game_over = False
-    turn = 0
-
-    while not game_over:
-        if turn == 0:
-            
-            with multiprocessing.Manager() as manager:
-                return_dict = manager.dict()
-                processes = []
-                for d in range(1, 6):  # Adjust the range according to the desired depth
-                    input_data = (board.copy(), d, -np.Inf, np.Inf, True)
-                    process = multiprocessing.Process(target=minimax_process, args=(input_data, return_dict))
-                    processes.append(process)
-                    process.start()
-
-                for process in processes:
-                    process.join()
-
-                depth_results = [(return_dict[d][0], return_dict[d][1]) for d in range(1, 6)]  # Adjust the range here as well
-                col, minimax_score = max(depth_results, key=lambda item: item[1])
-                
-            if is_valid_location(board, col):
-                row = get_next_open_row(board, col)
-                drop_piece(board, row, col, 1)
-
-                if winning_move(board, 1):
-                    print("Player 1 wins!")
-                    game_over = True
-
-        else:
-            
-            with multiprocessing.Manager() as manager:
-                return_dict = manager.dict()
-                processes = []
-                for d in range(1, 6):  # Adjust the range according to the desired depth
-                    input_data = (board.copy(), d, -np.Inf, np.Inf, False)
-                    process = multiprocessing.Process(target=minimax_process, args=(input_data, return_dict))
-                    processes.append(process)
-                    process.start()
-
-                for process in processes:
-                    process.join()
-
-                depth_results = [(return_dict[d][0], return_dict[d][1]) for d in range(1, 6)]  # Adjust the range here as well
-                col, minimax_score = max(depth_results, key=lambda item: item[1])
-
-            if is_valid_location(board, col):
-                row = get_next_open_row(board, col)
-                drop_piece(board, row, col, 2)
-
-                if winning_move(board, 2):
                     print("Player 2 wins!")
+                    player2_wins += 1
                     game_over = True
 
         player1_percent, player2_percent = calculate_probabilities(board)
-        print_board(board, player1_percent, player2_percent)
+        print_board(board, player1_percent, player2_percent, f"Player 1: {player1_wins} of {possible_wins} possible_wins", f"Player 2: {player2_wins} of {possible_wins} possible_wins")
 
         turn += 1
         turn = turn % 2
+
 
 def main():
     choice = int(input("Enter 1 to play against the AI, 2 to watch the AI play itself: "))
@@ -368,16 +400,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
-
-
-
-
-#                             woof
-#                   _ |\_
-#                   \` ..\
-#              __,.-" =__Y=
-#            ."        )
-#      _    /   ,    \/\_
-#     ((____|    )_-\ \_-`
-#     `-----'`-----` `--`
