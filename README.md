@@ -6,7 +6,6 @@ This Connect 4 Game is a classic two-player board game designed for
 Python 3 terminal, offering a strategic experience against a computer 
 
 
-Game Percentage Done: 53%
 
 
 
@@ -33,28 +32,6 @@ FEATURES:
     
     Order of Player ✔️
 
-MODES:
 
-    Extreme ✔️
-    
-
-    Hard (COMING SOON) 🔴
-    
-
-    Medium (COMING SOON) 🔴
-    
-
-    Stupid (COMING SOON) 🔴
-
-COMING SOON:
-
-
-    Player VS Player  🔴
-    
-
-    Game Modes 🔴
-    
-
-    Connect 4 Cheater 🔴
     
 
