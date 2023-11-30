@@ -2,7 +2,8 @@ import multiprocessing
 import numpy as np
 import os
 #import time
-#slim down latter too bulky
+
+#too bulky
 ROW_COUNT = 6
 
 COLUMN_COUNT = 7
@@ -46,7 +47,7 @@ def get_next_open_row(board, col):
 player_color_code = ""
 ai_color_code = ""
 
-#works well dont toutch
+
 def print_board(board, player_prob, ai_prob, player_wins, ai_wins):
     os.system('cls' if os.name == 'nt' else 'clear')  # Clear terminal (neatness)
 
@@ -88,7 +89,7 @@ def count_possible_openings(board, piece):
     for col in range(COLUMN_COUNT):
         playable = is_valid_location(board, col)
         for row in range(ROW_COUNT - 1, -1, -1):
-            if board[row][col] == 0 and playable:            #this is broken (finding wrong # of openings) 
+            if board[row][col] == 0 and playable:            #this is wrong (finding wrong # of openings) 
                 openings += 1
             elif board[row][col] != 0:
                 playable = False
@@ -97,25 +98,25 @@ def count_possible_openings(board, piece):
 ######################################################################################################
 
 def winning_move(board, piece):
-    # Check horizontal 
+    # Check H
     for c in range(COLUMN_COUNT - 3):
         for r in range(ROW_COUNT):
             if board[r][c] == piece and board[r][c + 1] == piece and board[r][c + 2] == piece and board[r][c + 3] == piece:
                 return True
 
-    # Check vertical 
+    # Check V
     for c in range(COLUMN_COUNT):
         for r in range(ROW_COUNT - 3):
             if board[r][c] == piece and board[r + 1][c] == piece and board[r + 2][c] == piece and board[r + 3][c] == piece:
                 return True
 
-    # Check positive diagonals
+    # Check positive D
     for c in range(COLUMN_COUNT - 3):
         for r in range(ROW_COUNT - 3):
             if board[r][c] == piece and board[r + 1][c + 1] == piece and board[r + 2][c + 2] == piece and board[r + 3][c + 3] == piece:
                 return True
 
-    # Check negative diagonals
+    # Check negative D
     for c in range(COLUMN_COUNT - 3):
         for r in range(3, ROW_COUNT):
             if board[r][c] == piece and board[r - 1][c + 1] == piece and board[r - 2][c + 2] == piece and board[r - 3][c + 3] == piece:
@@ -144,27 +145,27 @@ def score_position(board, piece):
     center_count = center_array.count(piece)
     score += center_count * 3
 
-    #horizontal
+    #H
     for r in range(ROW_COUNT):
         row_array = [int(i) for i in list(board[r, :])]
         for c in range(COLUMN_COUNT - 3):
             window = row_array[c:c + 4]
             score += evaluate_window(window, piece)
 
-    #vertical
+    #V
     for c in range(COLUMN_COUNT):
         col_array = [int(i) for i in list(board[:, c])]
         for r in range(ROW_COUNT - 3):
             window = col_array[r:r + 4]
             score += evaluate_window(window, piece)
 
-    #positive diagonal
+    #positive D
     for r in range(ROW_COUNT - 3):
         for c in range(COLUMN_COUNT - 3):
             window = [board[r + i][c + i] for i in range(4)]
             score += evaluate_window(window, piece)
 
-    #negative diagonal
+    #negative D
     for r in range(ROW_COUNT - 3):
         for c in range(COLUMN_COUNT - 3):
             window = [board[r + 3 - i][c + i] for i in range(4)]
@@ -204,7 +205,7 @@ def minimax(board, depth, alpha, beta, maximizingPlayer):
             if alpha >= beta:
                 break
         return column, value
-    else:  #  player
+    else:  #  player############################################################
         value = np.Inf
         column = np.random.choice(valid_locations)
         for col in valid_locations:
@@ -219,7 +220,7 @@ def minimax(board, depth, alpha, beta, maximizingPlayer):
             if alpha >= beta:
                 break
         return column, value
-
+###############################################################################
 def get_valid_locations(board):
     valid_locations = []
     for col in range(COLUMN_COUNT):
@@ -415,15 +416,14 @@ def main():
 
 if __name__ == "__main__":
     main()
-#if it works it works...
 
 #                   _ |\_   woof
-#                   \` ..\
+#                   \` ..\  /
 #              __,.-" =__Y=       woof
-#            ."        )              ╱|、
+#            ."        )            \ ╱|、
 #      _    /   ,    \/\_            (˚ˎ 。7  
 #     ((____|    )_-\ \_-`            |、˜〵          
-#    `-----'`-----` `--`              じしˍ,)ノ
+#      `-----'`-----` `--`            じしˍ,)ノ
 
 
 
