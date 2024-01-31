@@ -3,12 +3,11 @@ import numpy as np
 import os
 #import time
 
-#too bulky
 ROW_COUNT = 6
 
 COLUMN_COUNT = 7
 
-possible_wins = 51 # double check this 
+possible_wins = 51 
 
 #DEPTH = 51 
 
@@ -68,7 +67,7 @@ def print_board(board, player_prob, ai_prob, player_wins, ai_wins):
                 row_display += '\033[92mO\033[0m|'  #green 
         if player_prob > ai_prob:
             player_color_code = '\033[92m'  #higher (green)
-            ai_color_code = '\033[91m'  #flower  (red)
+            ai_color_code = '\033[91m'  #lower  (red)
         elif player_prob < ai_prob:
             player_color_code = '\033[91m'  #low(
             ai_color_code = '\033[92m'  # higher(
@@ -89,7 +88,7 @@ def count_possible_openings(board, piece):
     for col in range(COLUMN_COUNT):
         playable = is_valid_location(board, col)
         for row in range(ROW_COUNT - 1, -1, -1):
-            if board[row][col] == 0 and playable:            #this is wrong (finding wrong # of openings) 
+            if board[row][col] == 0 and playable:            #Check
                 openings += 1
             elif board[row][col] != 0:
                 playable = False
@@ -187,7 +186,7 @@ def minimax(board, depth, alpha, beta, maximizingPlayer):
                 return (None, -10000000000000)
             else:  # Game over
                 return (None, 0)
-        else:  # Depth is zero // (no longer using depth) :(
+        else:  # Depth is zero // (no longer using depth) 
             return (None, score_position(board, 2))
 
     if maximizingPlayer:
@@ -365,7 +364,7 @@ def play_ai_vs_ai():
                     game_over = True
 
         else:
-            #predict player winning move
+            #predict player winning move + %
             _, predicted_player2_wins = minimax(board, 5, -np.Inf, np.Inf, False)
             player2_wins = predicted_player2_wins
 
